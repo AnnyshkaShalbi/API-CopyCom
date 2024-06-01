@@ -8,6 +8,7 @@ import (
 
 var router = map[string]func(w http.ResponseWriter, r *http.Request){
 	"Message": events.Message,
+	"Image":   events.Image,
 }
 
 func Start(host string) {

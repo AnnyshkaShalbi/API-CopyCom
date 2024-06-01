@@ -26,3 +26,13 @@ func SendMessage(token string, data []byte) {
 
 	return
 }
+
+func SendImage(token string, data []byte) {
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", token)
+	var answer = new(interface{})
+	if err := functions.PostJson(url, data, answer); err != nil {
+		log.Println("Error SendMessage", err)
+	}
+
+	return
+}
