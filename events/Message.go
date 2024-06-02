@@ -12,10 +12,13 @@ import (
 )
 
 type Message_params struct {
-	Name    string `json:"name"`
-	Phone   string `json:"phone"`
-	Email   string `json:"email"`
-	Comment string `json:"comment"`
+	Name       string `json:"name"`
+	Phone      string `json:"phone"`
+	Email      string `json:"email"`
+	Comment    string `json:"comment"`
+	Color      bool   `json:"color"`
+	ColorPages int    `json:"colorPages"`
+	CountPages int    `json:"countPages"`
 }
 
 func Message(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +27,7 @@ func Message(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&params)
 
 	if err != nil {
-		log.Println("Error parse post News => ", err)
+		log.Println("Error parse request copycom => ", err)
 		fmt.Fprintf(w, "{}")
 		return
 	}
@@ -33,7 +36,14 @@ func Message(w http.ResponseWriter, r *http.Request) {
 	mess += "👤 " + params.Name + "\n"
 	mess += "📞 " + params.Phone + "\n"
 	mess += "📬 " + params.Email + "\n"
-	mess += "📧 " + params.Comment
+	mess += "📧 " + params.Comment + "\n"
+	mess += "Количество страниц " + string(params.CountPages) + "\n"
+
+	if params.Color {
+		mess += "Красная обложка" + "\n"
+	} else {
+		mess += "Синяя обложка" + "\n"
+	}
 
 	fmt.Fprintf(w, "{}")
 
