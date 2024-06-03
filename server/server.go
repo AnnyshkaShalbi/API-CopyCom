@@ -7,8 +7,9 @@ import (
 )
 
 var router = map[string]func(w http.ResponseWriter, r *http.Request){
-	"Message":    events.Message,
-	"FileUpload": events.FileUpload,
+	"Message":       events.Message,
+	"FileUpload":    events.FileUpload,
+	"UploadService": events.UploadService,
 }
 
 func Start(host string) {
