@@ -11,63 +11,8 @@ import (
 	"path/filepath"
 )
 
-// type File interface {
-// 	io.Reader
-// 	io.ReaderAt
-// 	io.Seeker
-// 	io.Closer
-// }
-
-// type FileHeader struct {
-// 	Filename string
-// 	Header   textproto.MIMEHeader
-// 	Size     int64
-// }
-
-// type Form struct {
-// 	Value map[string][]string
-// 	File  map[string][]*FileHeader
-// }
-
-// Part представляет собой одну деталь в составном теле
-// type Part struct {
-// 	Header textproto.MIMEHeader
-// }
-
-// Reader — это итератор по частям в составном теле MIME. Базовый синтаксический анализатор Reader потребляет входные данные по мере необходимости. Ищущий не поддерживается.
-// type Reader struct {
-// }
-
-// Open открывает и возвращает File, связанный с FileHeader.
-// func (fh *FileHeader) Open() (File, error)
-
-// RemoveAll удаляет все временные файлы, связанные с формой.
-// func (f *Form) RemoveAll() error
-
-// func (p *Part) Close() error
-
-/*
-FileName возвращает параметр filename объекта Content-Disposition компонента заголовок.
-Если имя файла не пустое, то оно передается через путь к файлу.
-Base (который является зависит от платформы) перед возвратом.
-*/
-// func (p *Part) FileName()
-
-/*
-FormName возвращает параметр name, если p имеет Content-Disposition типа "form-data".
-В противном случае возвращается пустая строка.
-*/
-// func (p *Part) FormName() string
-
-// Read читает тело части, после ее заголовков и перед Начинается следующая часть (если таковая имеется).
-// func (p *Part) Read(d []byte) (n int, err error)
-
-// NewReader создает новый составной считыватель Reader из r с помощью метода заданной границей MIME.
-// func NewReader(r io.Reader, boundary string) *Reader
-
 func FileUpload(w http.ResponseWriter, r *http.Request) {
 	log.Println("FileUpload")
-
 	// Проверяем метод запроса
 	if r.Method != "POST" {
 		http.Error(w, "Only POST method is allowed", http.StatusMethodNotAllowed)
@@ -79,6 +24,7 @@ func FileUpload(w http.ResponseWriter, r *http.Request) {
 
 	// Получаем файл из запроса
 	file, _, err := r.FormFile("file")
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
