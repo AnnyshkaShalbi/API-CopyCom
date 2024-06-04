@@ -60,6 +60,10 @@ func UploadService(w http.ResponseWriter, r *http.Request) {
 		mess = "🖨 ТВЁРДЫЙ ПЕРЕПЛЁТ ДИПЛОМОВ 🖨" + "\n\n"
 	}
 
+	if params.Action == "brochure" {
+		mess = "🖨 БРОШЮРОВКА НА ПЛАСТИКОВУЮ ПРУЖИНУ 🖨" + "\n\n"
+	}
+
 	mess += "📂 Имя файла: " + params.Name + "\n"
 	mess += "📞 Телефон клиента: " + params.Phone + "\n"
 
