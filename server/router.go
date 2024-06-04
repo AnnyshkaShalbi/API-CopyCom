@@ -12,8 +12,20 @@ func accessDenied(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func setupCORS(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+}
+
 func api(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
+
+	setupCORS(&w)
+	if r.Method == http.MethodOptions {
+		w.Write([]byte("OK"))
+		return
+	}
 
 	usplit := strings.Split(r.URL.Path, "/api/")
 
@@ -39,6 +51,12 @@ func api(w http.ResponseWriter, r *http.Request) {
 func apiFile(w http.ResponseWriter, r *http.Request) {
 	log.Println("apiFile")
 	defer r.Body.Close()
+
+	setupCORS(&w)
+	if r.Method == http.MethodOptions {
+		w.Write([]byte("OK"))
+		return
+	}
 
 	usplit := strings.Split(r.URL.Path, "/api/upload/")
 
