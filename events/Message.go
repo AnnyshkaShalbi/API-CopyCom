@@ -52,13 +52,24 @@ func Message(w http.ResponseWriter, r *http.Request) {
 	}
 
 	mess := "🎓 Новый заказ 🎓" + "\n\n"
-	mess += "👤Имя: " + params.Name + "\n"
-	mess += "📞Телефон: " + params.Phone + "\n"
-	mess += "📬Email: " + params.Email + "\n"
-	mess += "📧Комментарий: " + params.Comment + "\n"
-	mess += "📑Всего страниц: " + fmt.Sprint(params.TotalPages) + "\n"
-	mess += "📑Количество страниц ч/б: " + fmt.Sprint(params.CountBlackPages) + "\n"
-	mess += "📑Количество цветных страниц: " + fmt.Sprint(params.CountColorPages) + "\n"
+	mess += "👤 Имя: " + params.Name + "\n"
+	mess += "📞 Телефон: " + params.Phone + "\n"
+
+	if len(params.Email) > 0 {
+		mess += "📬 Email: " + params.Email + "\n"
+	} else {
+		mess += "📬 Email не указан 📬" + "\n"
+	}
+
+	if len(params.Comment) > 0 {
+		mess += "📧 Комментарий: " + params.Comment + "\n"
+	} else {
+		mess += "📧 Комментарий не указан  " + "\n"
+	}
+
+	mess += "📑 Всего страниц: " + fmt.Sprint(params.TotalPages) + "\n"
+	mess += "📑 Количество страниц ч/б: " + fmt.Sprint(params.CountBlackPages) + "\n"
+	mess += "📑 Количество цветных страниц: " + fmt.Sprint(params.CountColorPages) + "\n"
 
 	if len(params.ColoredPages) == 0 {
 		mess += "📑Цветные страницы не указаны!" + "\n"
