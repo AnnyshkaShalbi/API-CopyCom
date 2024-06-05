@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -12,7 +11,6 @@ import (
 )
 
 func FileUpload(w http.ResponseWriter, r *http.Request) {
-	log.Println("FileUpload")
 	// Проверяем метод запроса
 	if r.Method != "POST" {
 		http.Error(w, "Only POST method is allowed", http.StatusMethodNotAllowed)
@@ -46,7 +44,6 @@ func FileUpload(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendFileToTelegram(fileBytes []byte, fileName string, chatID string, botToken string) error {
-	log.Println("sendFileToTelegram")
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument", botToken)
 
 	// Создаем буфер для записи многочастного сообщения

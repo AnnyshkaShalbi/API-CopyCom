@@ -12,20 +12,26 @@ import (
 )
 
 type Message_params struct {
-	Name              string `json:"name"`
-	Phone             string `json:"phone"`
-	Email             string `json:"email"`
-	Comment           string `json:"comment"`
-	Color             bool   `json:"color"`
-	TitleCover        string `json:"titleCover"`
-	TitleLogo         string `json:"titleLogo"`
-	TotalPages        int    `json:"totalPages"`
-	CountBlackPages   int    `json:"countBlackPages"`
-	CountColorPages   int    `json:"countColorPages"`
-	ColoredPages      []int  `json:"coloredPages"`
-	Price             int    `json:"price"`
-	PocketForReview   bool   `json:"pocketForReview"`
-	PocketDiskCD      bool   `json:"pocketDiskCD"`
+	Name            string `json:"name"`
+	Phone           string `json:"phone"`
+	Email           string `json:"email"`
+	Comment         string `json:"comment"`
+	Color           bool   `json:"color"`
+	TitleCover      string `json:"titleCover"`
+	TitleLogo       string `json:"titleLogo"`
+	TotalPages      int    `json:"totalPages"`
+	CountBlackPages int    `json:"countBlackPages"`
+	CountColorPages int    `json:"countColorPages"`
+	ColoredPages    []int  `json:"coloredPages"`
+	Price           int    `json:"price"`
+	PocketForReview bool   `json:"pocketForReview"`
+	PocketDiskCD    bool   `json:"pocketDiskCD"`
+	Date            struct {
+		CurrentDate   string `json:"currentDate"`
+		CurrentTime   string `json:"currentTime"`
+		ReadinessDate string `json:"readinessDate"`
+		ReadinessTime int64  `json:"readinessTime"`
+	} `json:"date"`
 	PlasticFileBefore struct {
 		Active   bool `json:"active"`
 		Quantity int  `json:"quantity"`
@@ -51,12 +57,12 @@ func Message(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mess := "🎓 Новый заказ 🎓" + "\n\n"
-	mess += "👤 Имя: " + params.Name + "\n"
-	mess += "📞 Телефон: " + params.Phone + "\n"
+	mess := "📣🎓 Новый заказ 🎓📣" + "\n\n"
+	mess += "👤 Имя: " + params.Name + " 👤\n"
+	mess += "📞 Телефон: " + params.Phone + " 📞\n"
 
 	if len(params.Email) > 0 {
-		mess += "📬 Email: " + params.Email + "\n"
+		mess += "📬 Email: " + params.Email + " 📬\n"
 	} else {
 		mess += "📬 Email не указан 📬" + "\n"
 	}
@@ -64,38 +70,38 @@ func Message(w http.ResponseWriter, r *http.Request) {
 	if len(params.Comment) > 0 {
 		mess += "📧 Комментарий: " + params.Comment + "\n"
 	} else {
-		mess += "📧 Комментарий не указан  " + "\n"
+		mess += "📧 Комментарий не указан 📧" + "\n"
 	}
 
-	mess += "📑 Всего страниц: " + fmt.Sprint(params.TotalPages) + "\n"
-	mess += "📑 Количество страниц ч/б: " + fmt.Sprint(params.CountBlackPages) + "\n"
-	mess += "📑 Количество цветных страниц: " + fmt.Sprint(params.CountColorPages) + "\n"
+	if params.Color {
+		mess += "\n" + "📕 Красная обложка 📕" + "\n"
+	} else {
+		mess += "\n" + "📘 Синяя обложка 📘" + "\n"
+	}
+
+	mess += "Заголовок обложки: " + params.TitleCover + "\n"
+	mess += "Заголовок логотипа: " + params.TitleLogo + "\n\n"
+
+	mess += "📃 Всего страниц: " + fmt.Sprint(params.TotalPages) + " 📃\n"
+	mess += "📃 Количество страниц ч/б: " + fmt.Sprint(params.CountBlackPages) + " 📃\n"
+	mess += "📃 Количество цветных страниц: " + fmt.Sprint(params.CountColorPages) + " 📃\n\n"
 
 	if len(params.ColoredPages) == 0 {
-		mess += "📑Цветные страницы не указаны!" + "\n"
+		mess += "🌈 Цветные страницы не указаны! 🌈" + "\n"
 	} else {
-		mess += "\n" + "Цветные страницы: "
+		mess += "\n" + " 🌈Цветные страницы: "
 
 		for _, number := range params.ColoredPages {
 			mess += fmt.Sprint(number) + ","
 		}
 
-		mess += "\n"
+		mess += " 🌈\n"
 	}
-
-	if params.Color {
-		mess += "\n" + "🟥 Красная обложка 🟥" + "\n"
-	} else {
-		mess += "\n" + "🟦 Синяя обложка 🟦" + "\n"
-	}
-
-	mess += "Заголовок обложки: " + params.TitleCover + "\n"
-	mess += "Заголовок логотипа: " + params.TitleLogo + "\n"
 
 	if params.PocketForReview {
-		mess += "✅ Вклеить карман для рецензии ✅" + "\n"
+		mess += "\n" + "✅ Вклеить карман для рецензии ✅" + "\n"
 	} else {
-		mess += "❌ Не вклеивать карман для рецензии ❌" + "\n"
+		mess += "\n" + "❌ Не вклеивать карман для рецензии ❌" + "\n"
 	}
 
 	if params.PocketDiskCD {
@@ -119,7 +125,10 @@ func Message(w http.ResponseWriter, r *http.Request) {
 		mess += "Количество: " + fmt.Sprint(params.PlastikFileInTheEnd.Quantity) + "\n"
 	}
 
-	mess += "💰ЦЕНА💰: " + fmt.Sprint(params.Price) + " ₽" + "\n"
+	mess += "\n" + "🗓 Дата заполнения заявки: " + params.Date.CurrentDate + " в " + params.Date.CurrentTime + " 🗓\n\n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t⌛ ⌛ ⌛"
+	mess += "\n\n" + "🗓 Дата готовности : " + params.Date.ReadinessDate + " с " + fmt.Sprint(params.Date.ReadinessTime) + ":00" + " 🗓\n\n"
+
+	mess += "💰🧮 ЦЕНА : " + fmt.Sprint(params.Price) + " ₽" + " 🧮💰\n"
 
 	fmt.Fprintf(w, "{}")
 
